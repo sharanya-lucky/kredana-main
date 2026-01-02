@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";  // ✅ NO Router import
+import { Routes, Route, useLocation } from "react-router-dom";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -28,6 +28,9 @@ import PaymentPage from "./components/PaymentPage";
 import CartPage from "./components/CartPage";
 import WishlistPage from "./components/WishlistPage";
 
+// ✅ ADD THESE IMPORTS
+import SellSportsMaterial from "./components/InstituteDashboard/SellSportsMaterial";
+import UploadProductDetails from "./components/InstituteDashboard/UploadProductDetails";
 
 import "./index.css";
 
@@ -50,7 +53,7 @@ function App() {
         <WishlistProvider>
           <div className="bg-white text-black min-h-screen">
             {showNavbar && <Navbar />}
-            
+
             <Routes>
               {/* Auth & Landing */}
               <Route path="/" element={<RoleSelection />} />
@@ -67,12 +70,21 @@ function App() {
               <Route path="/Payment" element={<PaymentPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/wishlist" element={<WishlistPage />} />
-            
 
               {/* Dashboards */}
               <Route path="/institutes/dashboard" element={<InstituteDashboard />} />
               <Route path="/user/dashboard" element={<UserDashboard />} />
               <Route path="/trainers/dashboard" element={<TrainersDashboard />} />
+
+              {/* ✅ SELL PRODUCT FLOW */}
+              <Route
+                path="/sell-sports-material"
+                element={<SellSportsMaterial />}
+              />
+              <Route
+                path="/upload-product-details"
+                element={<UploadProductDetails />}
+              />
 
               {/* View Pages */}
               <Route path="/viewInstitutes" element={<ViewInstitutes />} />
@@ -82,14 +94,13 @@ function App() {
               <Route path="/institutes/:id" element={<InstituteDetailsPage />} />
               <Route path="/trainers/:id" element={<TrainerDetailsPage />} />
 
-              {/* Services - PLACEHOLDER */}
+              {/* Services */}
               <Route path="/services/fitness" element={<div className="p-8 text-center text-gray-500">Fitness Coming Soon</div>} />
               <Route path="/services/martial-arts" element={<div className="p-8 text-center text-gray-500">Martial Arts Coming Soon</div>} />
               <Route path="/services/equestrian-sports" element={<div className="p-8 text-center text-gray-500">Equestrian Coming Soon</div>} />
               <Route path="/services/racketsports" element={<div className="p-8 text-center text-gray-500">Racket Sports Coming Soon</div>} />
               <Route path="/services/adventure-outdoor-sports" element={<div className="p-8 text-center text-gray-500">Adventure Coming Soon</div>} />
               <Route path="/services/teamball" element={<div className="p-8 text-center text-gray-500">TeamBall Coming Soon</div>} />
-              
             </Routes>
           </div>
         </WishlistProvider>

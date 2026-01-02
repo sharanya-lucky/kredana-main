@@ -1,8 +1,10 @@
 // src/components/InstituteDashboard/SellSportsMaterial.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ ADDED (ONLY)
 
 const SellSportsMaterial = () => {
   const [step, setStep] = useState(1);
+  const navigate = useNavigate(); // ✅ ADDED (ONLY)
 
   /* ---------------- BUSINESS STATE ---------------- */
   const [businessDetails, setBusinessDetails] = useState({
@@ -72,7 +74,11 @@ const SellSportsMaterial = () => {
             : "Full Business Details"}
         </h1>
 
-        <button className="border border-orange-400 text-orange-600 px-4 py-1 rounded-md text-sm">
+        {/* ✅ ONLY CHANGE: navigation added */}
+        <button
+          onClick={() => navigate("/upload-product-details")}
+          className="border border-orange-400 bg-orange-500 text-black px-4 py-1 rounded-md text-sm"
+        >
           Sell a Product
         </button>
       </div>
@@ -210,8 +216,6 @@ const SellSportsMaterial = () => {
       {/* ================= STEP 2 ================= */}
       {step === 2 && (
         <form onSubmit={handleSave}>
-          
-          {/* EDIT BUTTON */}
           <div className="flex justify-end mb-2">
             <button
               type="button"
@@ -265,8 +269,6 @@ const SellSportsMaterial = () => {
       {/* ================= STEP 3 ================= */}
       {step === 3 && (
         <div>
-
-          {/* BUSINESS HEADING */}
           <div className="flex justify-between items-center mb-2">
             <h2 className="text-xl text-black font-bold">
               Provide Your Business Details
@@ -280,7 +282,6 @@ const SellSportsMaterial = () => {
             </button>
           </div>
 
-          {/* BUSINESS BOX */}
           <div className="border p-4 bg-gray-50 mb-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {Object.keys(businessDetails).map((key) => (
@@ -309,12 +310,10 @@ const SellSportsMaterial = () => {
             </div>
           </div>
 
-          {/* BANK HEADING */}
           <h2 className="text-xl text-black font-bold mb-2">
             Bank & Settlement Details (T+2 Settlement)
           </h2>
 
-          {/* BANK BOX */}
           <div className="border p-4 bg-gray-50">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {Object.keys(bankDetails).map((key) => (
@@ -341,7 +340,6 @@ const SellSportsMaterial = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
