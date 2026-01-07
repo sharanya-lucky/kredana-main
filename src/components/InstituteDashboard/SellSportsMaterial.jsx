@@ -1,10 +1,10 @@
 // src/components/InstituteDashboard/SellSportsMaterial.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ ADDED (ONLY)
+import { useNavigate } from "react-router-dom";
 
 const SellSportsMaterial = () => {
   const [step, setStep] = useState(1);
-  const navigate = useNavigate(); // ✅ ADDED (ONLY)
+  const navigate = useNavigate();
 
   /* ---------------- BUSINESS STATE ---------------- */
   const [businessDetails, setBusinessDetails] = useState({
@@ -14,7 +14,7 @@ const SellSportsMaterial = () => {
     emailBusiness: "",
     panCardNumber: "",
     gstin: "",
-    gstinNumber: "",
+    gstinNumber: "", // NOT required
     authorizedContactPersonName: "",
     mobileNumber: "",
   });
@@ -50,16 +50,26 @@ const SellSportsMaterial = () => {
     }));
   };
 
-  /* ---------------- STEP-2 SAVE → GO TO STEP-3 ---------------- */
-  const handleSave = (e) => {
-    e.preventDefault();
-    setEditModeStep2(false);   // lock step2 fields
-    setStep(3);
-  };
+  /* ---------------- AGREEMENTS ---------------- */
+  const [agreeCommercial, setAgreeCommercial] = useState(false);
+  const [agreeSeller, setAgreeSeller] = useState(false);
 
   /* ---------------- EDIT MODES ---------------- */
   const [editModeStep2, setEditModeStep2] = useState(true);
   const [editModeStep3, setEditModeStep3] = useState(false);
+
+  /* ---------------- STEP-2 SAVE ---------------- */
+  const handleSave = (e) => {
+    e.preventDefault();
+
+    if (!agreeCommercial || !agreeSeller) {
+      alert("Please agree to all terms before saving.");
+      return;
+    }
+
+    setEditModeStep2(false);
+    setStep(3);
+  };
 
   return (
     <div className="p-8 bg-white rounded-2xl shadow-xl max-w-4xl mx-auto">
@@ -74,7 +84,6 @@ const SellSportsMaterial = () => {
             : "Full Business Details"}
         </h1>
 
-        {/* ✅ ONLY CHANGE: navigation added */}
         <button
           onClick={() => navigate("/upload-product-details")}
           className="border border-orange-400 bg-orange-500 text-black px-4 py-1 rounded-md text-sm"
@@ -92,6 +101,7 @@ const SellSportsMaterial = () => {
                 Legal Business Name
               </label>
               <input
+                required
                 name="legalBusinessName"
                 onChange={handleInputChange}
                 value={businessDetails.legalBusinessName}
@@ -104,6 +114,7 @@ const SellSportsMaterial = () => {
                 Business Type
               </label>
               <input
+                required
                 name="businessType"
                 onChange={handleInputChange}
                 value={businessDetails.businessType}
@@ -117,6 +128,7 @@ const SellSportsMaterial = () => {
               Registered Business Address
             </label>
             <input
+              required
               name="registeredBusinessAddress"
               onChange={handleInputChange}
               value={businessDetails.registeredBusinessAddress}
@@ -130,6 +142,7 @@ const SellSportsMaterial = () => {
                 E-mail Id (Business)
               </label>
               <input
+                required
                 name="emailBusiness"
                 onChange={handleInputChange}
                 value={businessDetails.emailBusiness}
@@ -142,6 +155,7 @@ const SellSportsMaterial = () => {
                 PAN card number
               </label>
               <input
+                required
                 name="panCardNumber"
                 onChange={handleInputChange}
                 value={businessDetails.panCardNumber}
@@ -156,6 +170,7 @@ const SellSportsMaterial = () => {
                 GSTIN
               </label>
               <input
+                required
                 name="gstin"
                 onChange={handleInputChange}
                 value={businessDetails.gstin}
@@ -182,6 +197,7 @@ const SellSportsMaterial = () => {
                 Authorized Contact Person Name
               </label>
               <input
+                required
                 name="authorizedContactPersonName"
                 onChange={handleInputChange}
                 value={businessDetails.authorizedContactPersonName}
@@ -194,6 +210,7 @@ const SellSportsMaterial = () => {
                 Mobile Number
               </label>
               <input
+                required
                 name="mobileNumber"
                 onChange={handleInputChange}
                 value={businessDetails.mobileNumber}
@@ -216,16 +233,6 @@ const SellSportsMaterial = () => {
       {/* ================= STEP 2 ================= */}
       {step === 2 && (
         <form onSubmit={handleSave}>
-          <div className="flex justify-end mb-2">
-            <button
-              type="button"
-              className="bg-orange-500 text-black px-4 py-1 rounded"
-              onClick={() => setEditModeStep2(!editModeStep2)}
-            >
-              {editModeStep2 ? "Save" : "Edit"}
-            </button>
-          </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {[
               { label: "Bank account holder Name", name: "accountHolder" },
@@ -236,8 +243,11 @@ const SellSportsMaterial = () => {
               { label: "Cancelled Cheque Or Bank Proof", name: "chequeProof" },
             ].map((item) => (
               <div key={item.name}>
-                <label className="font-semibold text-black">{item.label}</label>
+                <label className="font-semibold text-black">
+                  {item.label}
+                </label>
                 <input
+                  required={item.name !== "upiId"}
                   disabled={!editModeStep2}
                   name={item.name}
                   onChange={handleBankChange}
@@ -250,16 +260,34 @@ const SellSportsMaterial = () => {
 
           <div className="mt-4 space-y-3">
             <label className="flex items-center gap-2 text-black text-[15px]">
-              <input type="checkbox" /> I Agree Commercial Terms
+              <input
+                type="checkbox"
+                checked={agreeCommercial}
+                onChange={() => setAgreeCommercial(!agreeCommercial)}
+              />
+              I Agree Commercial Terms
             </label>
 
             <label className="flex items-center gap-2 text-black text-[15px]">
-              <input type="checkbox" /> I Agree Seller Consent & Agreement
+              <input
+                type="checkbox"
+                checked={agreeSeller}
+                onChange={() => setAgreeSeller(!agreeSeller)}
+              />
+              I Agree Seller Consent & Agreement
             </label>
           </div>
 
           <div className="flex justify-center mt-6">
-            <button className="bg-orange-500 text-black px-14 py-2 rounded-xl font-bold text-lg">
+            <button
+              type="submit"
+              disabled={!agreeCommercial || !agreeSeller}
+              className={`px-14 py-2 rounded-xl font-bold text-lg ${
+                agreeCommercial && agreeSeller
+                  ? "bg-orange-500 text-black"
+                  : "bg-gray-300 cursor-not-allowed"
+              }`}
+            >
               Save
             </button>
           </div>
@@ -285,16 +313,7 @@ const SellSportsMaterial = () => {
           <div className="border p-4 bg-gray-50 mb-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {Object.keys(businessDetails).map((key) => (
-                <div
-                  key={key}
-                  className={
-                    key === "registeredBusinessAddress" ||
-                    key === "authorizedContactPersonName" ||
-                    key === "mobileNumber"
-                      ? "lg:col-span-2"
-                      : ""
-                  }
-                >
+                <div key={key}>
                   <label className="font-semibold text-sm text-black">
                     {key.replace(/([A-Z])/g, " $1")}
                   </label>
@@ -334,9 +353,15 @@ const SellSportsMaterial = () => {
           </div>
 
           <div className="flex justify-center mt-6">
-            <button className="bg-orange-500 text-black px-14 py-2 rounded-xl font-bold text-lg">
-              Save
-            </button>
+            <button
+  onClick={() => {
+    navigate("/institutes/dashboard", { replace: true });
+    window.location.reload();
+  }}
+  className="bg-orange-500 text-black px-14 py-2 rounded-xl font-bold text-lg"
+>
+  Save
+</button>
           </div>
         </div>
       )}

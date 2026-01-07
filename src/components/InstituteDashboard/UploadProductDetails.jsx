@@ -16,14 +16,10 @@ const UploadProductDetails = () => {
   const [view, setView] = useState("form");
   const [editIndex, setEditIndex] = useState(null);
 
-  const navigate = useNavigate(); // ✅ ADDED
+  const navigate = useNavigate();
 
-  // ➕ Add Card
+  // ➕ Add Card (✅ NO LIMIT NOW)
   const handleAddCard = () => {
-    if (products.length >= 5) {
-      alert("You can add maximum 5 products only");
-      return;
-    }
     setProducts([...products, { ...emptyProduct }]);
     setEditIndex(null);
   };
@@ -69,8 +65,6 @@ const UploadProductDetails = () => {
   if (view === "list") {
     return (
       <div className="p-6 bg-white rounded-xl shadow-xl">
-
-        {/* TOP RIGHT HEADER */}
         <div className="flex justify-end mb-8 gap-3">
           <button
             onClick={() => {
@@ -136,8 +130,6 @@ const UploadProductDetails = () => {
   /* ============================= */
   return (
     <div className="p-6 bg-white rounded-xl shadow-xl">
-
-      {/* TOP RIGHT HEADER */}
       <div className="flex justify-end mb-6">
         <div className="flex flex-col items-end gap-2">
           <div className="flex gap-3">
@@ -189,7 +181,6 @@ const UploadProductDetails = () => {
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-black">
-
               <div>
                 <label className="font-semibold text-sm">Product Name</label>
                 <input
@@ -267,7 +258,6 @@ const UploadProductDetails = () => {
                   className="w-full border-2 border-orange-300 rounded px-3 py-2"
                 />
               </div>
-
             </div>
           </div>
         );

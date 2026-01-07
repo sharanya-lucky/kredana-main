@@ -16,7 +16,7 @@ import PaymentsPage from "./PaymentsPage";
 import Editprofile from "./Editprofile";
 import ClassTime from "./ClassTime";
 import SellSportsMaterial from "./SellSportsMaterial";
-import UploadProductDetails from "./UploadProductDetails";   // 👈 NEW IMPORT
+import UploadProductDetails from "./UploadProductDetails";
 
 const sidebarItems = [
   "Home",
@@ -49,6 +49,7 @@ const InstituteDashboard = () => {
   const [students, setStudents] = useState([]);
   const [trainers, setTrainers] = useState([]);
 
+  /* ---------------- AUTO LOGOUT ---------------- */
   useEffect(() => {
     const resetTimer = () => {
       if (idleTimer.current) clearTimeout(idleTimer.current);
@@ -74,6 +75,7 @@ const InstituteDashboard = () => {
     }
   };
 
+  /* ---------------- FETCH STUDENTS & TRAINERS ---------------- */
   useEffect(() => {
     if (!user?.uid) return;
 
@@ -115,6 +117,7 @@ const InstituteDashboard = () => {
     };
   }, [user]);
 
+  /* ---------------- MAIN CONTENT ---------------- */
   const renderMainContent = () => {
     switch (activeMenu) {
       case "Home":
@@ -181,6 +184,10 @@ const InstituteDashboard = () => {
             <button
               key={item}
               onClick={() => {
+                if (item === "Home") {
+                  setActiveMenu("Home");     // ✅ FIX ADDED
+                  return navigate("/landing");
+                }
                 if (item === "Log Out") return handleLogout();
                 if (item === "Shop") return navigate("/shop");
                 setActiveMenu(item);
